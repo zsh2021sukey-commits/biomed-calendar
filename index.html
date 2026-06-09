@@ -13,7 +13,7 @@
   var _hmt = _hmt || [];
   (function() {
     var hm = document.createElement("script");
-    hm.src = "https://hm.baidu.com/hm.js?e8b845578851b6def8960d6c97841615";
+    hm.src = "https://hm.baidu.com/hm.js?19d37da1bab9cd51592b35f51cdbbb67";
     var s = document.getElementsByTagName("script")[0];
     s.parentNode.insertBefore(hm, s);
   })();
@@ -169,6 +169,12 @@
       white-space: nowrap;
     }
 
+    .why {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
     a {
       color: var(--accent);
       text-decoration: none;
@@ -246,6 +252,7 @@
             <th>会议</th>
             <th>领域</th>
             <th>关注重点</th>
+            <th>为什么关注</th>
             <th>官网</th>
           </tr>
         </thead>
@@ -461,6 +468,31 @@
       }
     ];
 
+    const conferenceNotes = {
+      "asco-gi-2026": "消化道肿瘤专题会，很多胃癌、结直肠癌、肝胆胰项目会在年初先放出阶段性临床数据。",
+      "asco-gu-2026": "泌尿生殖肿瘤专题会，适合跟踪前列腺癌、肾癌、尿路上皮癌的新药组合和关键队列更新。",
+      "acc-2026": "心血管大型结局研究常在这里发布，适合关注降脂、心衰、抗凝和心血管代谢交叉领域。",
+      "aad-2026": "皮肤免疫和炎症领域的重要会议，适合关注特应性皮炎、银屑病、斑秃等创新疗法。",
+      "aacr-2026": "更偏早期创新和转化医学，适合提前发现新靶点、first-in-human、ADC、双抗和细胞治疗信号。",
+      "aan-2026": "神经疾病研发周期长、数据窗口少，AAN 是观察阿尔茨海默病、帕金森和 MS 项目的重要节点。",
+      "ddw-2026": "消化领域重点会议，适合跟踪 IBD、MASH 相关消化疾病和消化道新机制疗法。",
+      "asco-annual-2026": "实体瘤临床数据最核心的年度窗口之一，很多 II/III 期关键数据和 LBA 会在这里发布。",
+      "eular-2026": "欧洲风湿免疫核心会议，适合关注自免药物、JAK/BTK/TYK2、细胞治疗向自免领域延展。",
+      "ada-2026": "糖尿病和代谢领域核心会议，GLP-1、肥胖、胰岛素和并发症数据值得重点跟踪。",
+      "eha-2026": "上半年血液领域重要窗口，适合跟踪血液肿瘤、CAR-T、双抗、BTK 和 BCL-2 类项目。",
+      "esc-2026": "欧洲心血管最重要会议之一，大型 III 期、结局研究和指南相关数据影响力较高。",
+      "ers-2026": "呼吸领域重点会议，适合关注哮喘、COPD、肺纤维化和肺动脉高压等慢病创新药。",
+      "wclc-2026": "肺癌专科会影响力很高，EGFR/ALK、ADC、免疫联合和胸部肿瘤项目常有重要更新。",
+      "easd-2026": "欧洲糖尿病和代谢会议，和 ADA 形成互补，适合跟踪代谢药物的后续分析和真实世界数据。",
+      "idweek-2026": "感染领域重点会议，适合关注抗菌药、抗病毒、疫苗和耐药菌相关临床进展。",
+      "esmo-2026": "下半年实体瘤最重要数据窗口之一，Presidential、LBA 和 Proffered Paper 值得提前加入日历。",
+      "acr-2026": "美国风湿免疫核心会议，适合跟踪自免新药、临床指南趋势和与 EULAR 互补的数据更新。",
+      "aasld-2026": "肝病领域核心会议，乙肝、MASH/NASH、肝纤维化和肝硬化项目常在这里更新。",
+      "aha-2026": "心血管 late-breaking 研究影响力高，适合关注心血管终点、真实世界和指南相关数据。",
+      "sabcs-2026": "乳腺癌年度专科会，HER2、HR+/HER2-、ADC、CDK4/6 和内分泌治疗数据密集。",
+      "ash-2026": "血液病和血液肿瘤全球最重要会议之一，年底集中发布 CAR-T、双抗、小分子和关键注册数据。"
+    };
+
     const fieldFilter = document.querySelector("#fieldFilter");
     const conferenceRows = document.querySelector("#conferenceRows");
     const statusLabel = document.querySelector("#status");
@@ -477,6 +509,10 @@
 
     function updateStatus() {
       statusLabel.textContent = `已选择 ${selectedIds.size} 个会议`;
+    }
+
+    function getConferenceWhy(item) {
+      return conferenceNotes[item.id] || "适合关注该领域临床研究、摘要发布和口头报告更新。";
     }
 
     function renderFilters() {
@@ -501,6 +537,7 @@
           <td><strong>${escapeHtml(item.name)}</strong></td>
           <td><span class="tag">${escapeHtml(item.field)}</span></td>
           <td>${escapeHtml(item.focus)}</td>
+          <td class="why">${escapeHtml(getConferenceWhy(item))}</td>
           <td><a href="${item.url}" target="_blank" rel="noopener">官网</a></td>
         `;
         conferenceRows.appendChild(row);
@@ -565,7 +602,7 @@
           `DTSTART;VALUE=DATE:${toIcsDate(item.start)}`,
           `DTEND;VALUE=DATE:${toIcsDate(addOneDay(item.end))}`,
           foldIcsLine(`SUMMARY:${escapeIcsText(item.name)}`),
-          foldIcsLine(`DESCRIPTION:${escapeIcsText(`${item.field}｜${item.focus}\n官网：${item.url}`)}`),
+          foldIcsLine(`DESCRIPTION:${escapeIcsText(`${item.field}｜${item.focus}\n为什么关注：${getConferenceWhy(item)}\n官网：${item.url}`)}`),
           foldIcsLine(`URL:${item.url}`),
           "END:VEVENT"
         );
