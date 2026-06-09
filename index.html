@@ -230,7 +230,7 @@
   <main>
     <header>
       <h1>生物医药会议日历生成器</h1>
-      <p class="subtitle">勾选想关注的会议，下载日历文件后即可添加到 iPhone 日历、Google Calendar 或 Outlook。会议日期会随主办方安排调整，正式参会、投稿、差旅和投资决策前请以官网最新信息为准。</p>
+      <p class="subtitle">覆盖 2026年6月到2027年6月的重要生物医药会议。勾选想关注的会议，下载日历文件后即可添加到 iPhone 日历、Google Calendar 或 Outlook。会议日期会随主办方安排调整，正式参会、投稿、差旅和投资决策前请以官网最新信息为准。</p>
     </header>
 
     <section class="controls" aria-label="日历生成控制">
@@ -262,236 +262,236 @@
 
     <p class="note">提示：全天事件的结束日期在 ICS 标准里要写成“会议结束日的下一天”，这个页面已经自动处理。</p>
     <section class="disclaimer" aria-label="使用声明">
-      本工具仅用于会议日程提醒和信息整理，不构成医学、投资、交易、参会或投稿建议。页面内日期和链接最后核对时间为 2026-06-09；会议主办方可能调整会期、地点、摘要解禁时间或线上访问规则，请以各会议官网发布的最新信息为准。
+      本工具仅用于会议日程提醒和信息整理，不构成医学、投资、交易、参会或投稿建议。页面覆盖 2026年6月-2027年6月，日期和链接最后核对时间为 2026-06-09；会议主办方可能调整会期、地点、摘要解禁时间或线上访问规则，未公布明确官方日期的会议暂不纳入，请以各会议官网发布的最新信息为准。
     </section>
   </main>
 
   <script>
     const conferences = [
       {
-        id: "asco-gi-2026",
-        name: "ASCO GI 2026",
-        start: "2026-01-08",
-        end: "2026-01-10",
-        field: "肿瘤/消化道肿瘤",
-        focus: "胃癌、结直肠癌、胰腺癌、肝胆肿瘤",
-        url: "https://meetings.asco.org/"
+            id: "eha-2026",
+            name: "EHA Congress 2026",
+            start: "2026-06-11",
+            end: "2026-06-14",
+            field: "血液",
+            focus: "血液病、血液肿瘤、CAR-T、双抗、BTK、BCL-2",
+            url: "https://ehaweb.org/connect-network/eha2026-congress"
       },
       {
-        id: "asco-gu-2026",
-        name: "ASCO GU 2026",
-        start: "2026-02-26",
-        end: "2026-02-28",
-        field: "肿瘤/泌尿生殖",
-        focus: "前列腺癌、肾癌、膀胱癌、尿路上皮癌",
-        url: "https://www.asco.org/gu"
+            id: "esc-2026",
+            name: "ESC Congress 2026",
+            start: "2026-08-28",
+            end: "2026-08-31",
+            field: "心血管",
+            focus: "大型 III 期研究、心血管结局、降脂、心衰、抗凝",
+            url: "https://www.escardio.org/Congresses-Events/ESC-Congress"
       },
       {
-        id: "acc-2026",
-        name: "ACC Scientific Session 2026",
-        start: "2026-03-28",
-        end: "2026-03-30",
-        field: "心血管",
-        focus: "降脂、抗凝、心衰、心血管结局研究",
-        url: "https://accscientificsession.acc.org/"
+            id: "ers-2026",
+            name: "ERS Congress 2026",
+            start: "2026-09-05",
+            end: "2026-09-09",
+            field: "呼吸",
+            focus: "哮喘、COPD、肺纤维化、肺动脉高压",
+            url: "https://www.ersnet.org/congress-and-events/congress/"
       },
       {
-        id: "aad-2026",
-        name: "AAD Annual Meeting 2026",
-        start: "2026-03-27",
-        end: "2026-03-31",
-        field: "皮肤",
-        focus: "特应性皮炎、银屑病、斑秃、自免皮肤病",
-        url: "https://meetings.aad.org/am2026/"
+            id: "wclc-2026",
+            name: "WCLC 2026",
+            start: "2026-09-12",
+            end: "2026-09-15",
+            field: "肺癌",
+            focus: "NSCLC、SCLC、EGFR/ALK、ADC、免疫联合、胸部肿瘤",
+            url: "https://wclc.iaslc.org/"
       },
       {
-        id: "aacr-2026",
-        name: "AACR Annual Meeting 2026",
-        start: "2026-04-17",
-        end: "2026-04-22",
-        field: "肿瘤",
-        focus: "早期临床、机制、转化医学、first-in-human、ADC、双抗、细胞治疗",
-        url: "https://www.aacr.org/meeting/aacr-annual-meeting-2026/"
+            id: "easd-2026",
+            name: "EASD Annual Meeting 2026",
+            start: "2026-09-28",
+            end: "2026-10-02",
+            field: "糖尿病/代谢",
+            focus: "糖尿病、肥胖、代谢药物，和 ADA 互补",
+            url: "https://www.easd.org/annual-meeting/easd-2026.html"
       },
       {
-        id: "aan-2026",
-        name: "AAN Annual Meeting 2026",
-        start: "2026-04-18",
-        end: "2026-04-22",
-        field: "神经",
-        focus: "阿尔茨海默病、帕金森、多发性硬化、罕见神经病",
-        url: "https://www.aan.com/events/annual-meeting"
+            id: "idweek-2026",
+            name: "IDWeek 2026",
+            start: "2026-10-21",
+            end: "2026-10-24",
+            field: "感染",
+            focus: "抗感染、疫苗、抗病毒、耐药菌",
+            url: "https://www.idweek.org/"
       },
       {
-        id: "ddw-2026",
-        name: "DDW 2026",
-        start: "2026-05-02",
-        end: "2026-05-05",
-        field: "消化",
-        focus: "IBD、消化道疾病、MASH 相关消化/肝病数据",
-        url: "https://ddw.org/home-page-2026/"
+            id: "esmo-2026",
+            name: "ESMO Congress 2026",
+            start: "2026-10-23",
+            end: "2026-10-27",
+            field: "肿瘤",
+            focus: "实体瘤下半年重磅临床数据、Presidential、LBA、Proffered Paper",
+            url: "https://www.esmo.org/meeting-calendar/esmo-congress-2026"
       },
       {
-        id: "asco-annual-2026",
-        name: "ASCO Annual Meeting 2026",
-        start: "2026-05-29",
-        end: "2026-06-02",
-        field: "肿瘤",
-        focus: "实体瘤重磅临床数据、Late-breaking、Oral、Plenary",
-        url: "https://www.asco.org/annual-meeting"
+            id: "aasld-2026",
+            name: "AASLD The Liver Meeting 2026",
+            start: "2026-11-05",
+            end: "2026-11-09",
+            field: "肝病",
+            focus: "乙肝、MASH/NASH、肝纤维化、肝硬化",
+            url: "https://www.aasld.org/tlm-26/home"
       },
       {
-        id: "eular-2026",
-        name: "EULAR Congress 2026",
-        start: "2026-06-03",
-        end: "2026-06-06",
-        field: "风湿免疫",
-        focus: "RA、SLE、Sjogren、自免细胞治疗",
-        url: "https://congress.eular.org/"
+            id: "acr-2026",
+            name: "ACR Convergence 2026",
+            start: "2026-11-06",
+            end: "2026-11-11",
+            field: "风湿免疫",
+            focus: "RA、SLE、Sjogren、自免创新药和细胞治疗",
+            url: "https://rheumatology.org/annual-meeting-registration"
       },
       {
-        id: "ada-2026",
-        name: "ADA Scientific Sessions 2026",
-        start: "2026-06-05",
-        end: "2026-06-08",
-        field: "糖尿病/代谢",
-        focus: "GLP-1、胰岛素、肥胖、糖尿病并发症",
-        url: "https://professional.diabetes.org/scientific-sessions"
+            id: "aha-2026",
+            name: "AHA Scientific Sessions 2026",
+            start: "2026-11-06",
+            end: "2026-11-09",
+            field: "心血管",
+            focus: "Late-breaking trial、心血管结局研究、真实世界数据",
+            url: "https://professional.heart.org/en/meetings/scientific-sessions"
       },
       {
-        id: "eha-2026",
-        name: "EHA Congress 2026",
-        start: "2026-06-11",
-        end: "2026-06-14",
-        field: "血液",
-        focus: "血液病、血液肿瘤、CAR-T、双抗、BTK、BCL-2",
-        url: "https://ehaweb.org/connect-network/eha2026-congress"
+            id: "sabcs-2026",
+            name: "SABCS 2026",
+            start: "2026-12-08",
+            end: "2026-12-11",
+            field: "乳腺癌",
+            focus: "HER2、HR+/HER2-、ADC、CDK4/6、内分泌治疗",
+            url: "https://sabcs.org/"
       },
       {
-        id: "esc-2026",
-        name: "ESC Congress 2026",
-        start: "2026-08-28",
-        end: "2026-08-31",
-        field: "心血管",
-        focus: "欧洲心血管核心大会，大型 III 期和结局研究",
-        url: "https://www.escardio.org/Congresses-Events/ESC-Congress"
+            id: "ash-2026",
+            name: "ASH Annual Meeting 2026",
+            start: "2026-12-12",
+            end: "2026-12-15",
+            field: "血液",
+            focus: "血液病、血液肿瘤、CAR-T、双抗、BTK、BCL-2",
+            url: "https://www.hematology.org/meetings/annual-meeting"
       },
       {
-        id: "ers-2026",
-        name: "ERS Congress 2026",
-        start: "2026-09-05",
-        end: "2026-09-09",
-        field: "呼吸",
-        focus: "哮喘、COPD、肺纤维化、肺动脉高压",
-        url: "https://www.ersnet.org/congress-and-events/congress/"
+            id: "asco-gi-2027",
+            name: "ASCO GI 2027",
+            start: "2027-01-21",
+            end: "2027-01-23",
+            field: "肿瘤/消化道肿瘤",
+            focus: "胃癌、结直肠癌、胰腺癌、肝胆肿瘤",
+            url: "https://www.asco.org/gi"
       },
       {
-        id: "wclc-2026",
-        name: "WCLC 2026",
-        start: "2026-09-12",
-        end: "2026-09-15",
-        field: "肺癌",
-        focus: "NSCLC、SCLC、EGFR/ALK、ADC、免疫联合、胸部肿瘤",
-        url: "https://wclc.iaslc.org/"
+            id: "asco-gu-2027",
+            name: "ASCO GU 2027",
+            start: "2027-02-11",
+            end: "2027-02-13",
+            field: "肿瘤/泌尿生殖",
+            focus: "前列腺癌、肾癌、膀胱癌、尿路上皮癌",
+            url: "https://www.asco.org/gu"
       },
       {
-        id: "easd-2026",
-        name: "EASD Annual Meeting 2026",
-        start: "2026-09-28",
-        end: "2026-10-02",
-        field: "糖尿病/代谢",
-        focus: "糖尿病、肥胖、代谢药物，和 ADA 互补",
-        url: "https://www.easd.org/annual-meeting/easd-2026.html"
+            id: "aad-2027",
+            name: "AAD Annual Meeting 2027",
+            start: "2027-03-19",
+            end: "2027-03-23",
+            field: "皮肤",
+            focus: "特应性皮炎、银屑病、斑秃、自免皮肤病",
+            url: "https://www.aad.org/member/meetings-education/am27"
       },
       {
-        id: "idweek-2026",
-        name: "IDWeek 2026",
-        start: "2026-10-21",
-        end: "2026-10-24",
-        field: "感染",
-        focus: "抗感染、疫苗、抗病毒、耐药菌",
-        url: "https://www.idweek.org/"
+            id: "aacr-2027",
+            name: "AACR Annual Meeting 2027",
+            start: "2027-04-02",
+            end: "2027-04-07",
+            field: "肿瘤",
+            focus: "早期临床、机制、转化医学、first-in-human、ADC、双抗、细胞治疗",
+            url: "https://www.aacr.org/meeting/aacr-annual-meeting-2027/"
       },
       {
-        id: "esmo-2026",
-        name: "ESMO Congress 2026",
-        start: "2026-10-23",
-        end: "2026-10-27",
-        field: "肿瘤",
-        focus: "实体瘤下半年重磅临床数据、Presidential、LBA、Proffered Paper",
-        url: "https://www.esmo.org/meeting-calendar/esmo-congress-2026"
+            id: "acc-2027",
+            name: "ACC.27/WCC",
+            start: "2027-04-10",
+            end: "2027-04-12",
+            field: "心血管",
+            focus: "降脂、抗凝、心衰、心血管结局研究",
+            url: "https://www.acc.org/footer-pages/media-center/annual-scientific-session"
       },
       {
-        id: "acr-2026",
-        name: "ACR Convergence 2026",
-        start: "2026-11-06",
-        end: "2026-11-11",
-        field: "风湿免疫",
-        focus: "美国风湿免疫核心会，和 EULAR 互补",
-        url: "https://rheumatology.org/annual-meeting-registration"
+            id: "aan-2027",
+            name: "AAN Annual Meeting 2027",
+            start: "2027-05-01",
+            end: "2027-05-05",
+            field: "神经",
+            focus: "阿尔茨海默病、帕金森、多发性硬化、罕见神经病",
+            url: "https://www.aan.com/events/upcoming-events"
       },
       {
-        id: "aasld-2026",
-        name: "AASLD The Liver Meeting 2026",
-        start: "2026-11-05",
-        end: "2026-11-09",
-        field: "肝病",
-        focus: "乙肝、MASH/NASH、肝纤维化、肝硬化",
-        url: "https://www.aasld.org/tlm-26/home"
+            id: "ddw-2027",
+            name: "DDW 2027",
+            start: "2027-05-15",
+            end: "2027-05-18",
+            field: "消化",
+            focus: "IBD、消化道疾病、MASH 相关消化/肝病数据",
+            url: "https://ddw.org/attendee-planning/ddw-2027/"
       },
       {
-        id: "aha-2026",
-        name: "AHA Scientific Sessions 2026",
-        start: "2026-11-06",
-        end: "2026-11-09",
-        field: "心血管",
-        focus: "Late-breaking trial、心血管结局研究",
-        url: "https://professional.heart.org/en/meetings/scientific-sessions"
+            id: "asco-annual-2027",
+            name: "ASCO Annual Meeting 2027",
+            start: "2027-06-04",
+            end: "2027-06-08",
+            field: "肿瘤",
+            focus: "实体瘤重磅临床数据、Late-breaking、Oral、Plenary",
+            url: "https://www.asco.org/annual-meeting/dates-know"
       },
       {
-        id: "sabcs-2026",
-        name: "SABCS 2026",
-        start: "2026-12-08",
-        end: "2026-12-11",
-        field: "乳腺癌",
-        focus: "乳腺癌年度重磅数据",
-        url: "https://sabcs.org/"
+            id: "eha-2027",
+            name: "EHA Congress 2027",
+            start: "2027-06-10",
+            end: "2027-06-13",
+            field: "血液",
+            focus: "血液病、血液肿瘤、CAR-T、双抗、BTK、BCL-2",
+            url: "https://ehaweb.org/connect-network/congress/future-congresses"
       },
       {
-        id: "ash-2026",
-        name: "ASH Annual Meeting 2026",
-        start: "2026-12-12",
-        end: "2026-12-15",
-        field: "血液",
-        focus: "血液病、血液肿瘤、CAR-T、双抗、BTK、BCL-2",
-        url: "https://www.hematology.org/meetings/annual-meeting"
+            id: "ada-2027",
+            name: "ADA Scientific Sessions 2027",
+            start: "2027-06-18",
+            end: "2027-06-21",
+            field: "糖尿病/代谢",
+            focus: "GLP-1、胰岛素、肥胖、糖尿病并发症",
+            url: "https://ada2027.org/"
       }
-    ];
+];
 
     const conferenceNotes = {
-      "asco-gi-2026": "消化道肿瘤专题会，很多胃癌、结直肠癌、肝胆胰项目会在年初先放出阶段性临床数据。",
-      "asco-gu-2026": "泌尿生殖肿瘤专题会，适合跟踪前列腺癌、肾癌、尿路上皮癌的新药组合和关键队列更新。",
-      "acc-2026": "心血管大型结局研究常在这里发布，适合关注降脂、心衰、抗凝和心血管代谢交叉领域。",
-      "aad-2026": "皮肤免疫和炎症领域的重要会议，适合关注特应性皮炎、银屑病、斑秃等创新疗法。",
-      "aacr-2026": "更偏早期创新和转化医学，适合提前发现新靶点、first-in-human、ADC、双抗和细胞治疗信号。",
-      "aan-2026": "神经疾病研发周期长、数据窗口少，AAN 是观察阿尔茨海默病、帕金森和 MS 项目的重要节点。",
-      "ddw-2026": "消化领域重点会议，适合跟踪 IBD、MASH 相关消化疾病和消化道新机制疗法。",
-      "asco-annual-2026": "实体瘤临床数据最核心的年度窗口之一，很多 II/III 期关键数据和 LBA 会在这里发布。",
-      "eular-2026": "欧洲风湿免疫核心会议，适合关注自免药物、JAK/BTK/TYK2、细胞治疗向自免领域延展。",
-      "ada-2026": "糖尿病和代谢领域核心会议，GLP-1、肥胖、胰岛素和并发症数据值得重点跟踪。",
-      "eha-2026": "上半年血液领域重要窗口，适合跟踪血液肿瘤、CAR-T、双抗、BTK 和 BCL-2 类项目。",
-      "esc-2026": "欧洲心血管最重要会议之一，大型 III 期、结局研究和指南相关数据影响力较高。",
+      "eha-2026": "从现在开始最近的血液领域大会议程，适合跟踪血液肿瘤、CAR-T、双抗和小分子项目的上半年更新。",
+      "esc-2026": "欧洲心血管最重要会议之一，大型结局研究、指南相关数据和 late-breaking 研究影响力高。",
       "ers-2026": "呼吸领域重点会议，适合关注哮喘、COPD、肺纤维化和肺动脉高压等慢病创新药。",
       "wclc-2026": "肺癌专科会影响力很高，EGFR/ALK、ADC、免疫联合和胸部肿瘤项目常有重要更新。",
       "easd-2026": "欧洲糖尿病和代谢会议，和 ADA 形成互补，适合跟踪代谢药物的后续分析和真实世界数据。",
       "idweek-2026": "感染领域重点会议，适合关注抗菌药、抗病毒、疫苗和耐药菌相关临床进展。",
       "esmo-2026": "下半年实体瘤最重要数据窗口之一，Presidential、LBA 和 Proffered Paper 值得提前加入日历。",
-      "acr-2026": "美国风湿免疫核心会议，适合跟踪自免新药、临床指南趋势和与 EULAR 互补的数据更新。",
       "aasld-2026": "肝病领域核心会议，乙肝、MASH/NASH、肝纤维化和肝硬化项目常在这里更新。",
+      "acr-2026": "美国风湿免疫核心会议，适合跟踪自免新药、临床指南趋势和与 EULAR 互补的数据更新。",
       "aha-2026": "心血管 late-breaking 研究影响力高，适合关注心血管终点、真实世界和指南相关数据。",
       "sabcs-2026": "乳腺癌年度专科会，HER2、HR+/HER2-、ADC、CDK4/6 和内分泌治疗数据密集。",
-      "ash-2026": "血液病和血液肿瘤全球最重要会议之一，年底集中发布 CAR-T、双抗、小分子和关键注册数据。"
-    };
+      "ash-2026": "血液病和血液肿瘤全球最重要会议之一，年底集中发布 CAR-T、双抗、小分子和关键注册数据。",
+      "asco-gi-2027": "消化道肿瘤专题会，很多胃癌、结直肠癌、肝胆胰项目会在年初先放出阶段性临床数据。",
+      "asco-gu-2027": "泌尿生殖肿瘤专题会，适合跟踪前列腺癌、肾癌、尿路上皮癌的新药组合和关键队列更新。",
+      "aad-2027": "皮肤免疫和炎症领域的重要会议，适合关注特应性皮炎、银屑病、斑秃等创新疗法。",
+      "aacr-2027": "更偏早期创新和转化医学，适合提前发现新靶点、first-in-human、ADC、双抗和细胞治疗信号。",
+      "acc-2027": "心血管大型结局研究常在这里发布，适合关注降脂、心衰、抗凝和心血管代谢交叉领域。",
+      "aan-2027": "神经疾病研发周期长、数据窗口少，AAN 是观察阿尔茨海默病、帕金森和 MS 项目的重要节点。",
+      "ddw-2027": "消化领域重点会议，适合跟踪 IBD、MASH 相关消化疾病和消化道新机制疗法。",
+      "asco-annual-2027": "实体瘤临床数据最核心的年度窗口之一，很多 II/III 期关键数据和 LBA 会在这里发布。",
+      "eha-2027": "血液领域上半年重要窗口，适合跟踪血液肿瘤、CAR-T、双抗、BTK 和 BCL-2 类项目。",
+      "ada-2027": "糖尿病和代谢领域核心会议，GLP-1、肥胖、胰岛素和并发症数据值得重点跟踪。"
+};
 
     const fieldFilter = document.querySelector("#fieldFilter");
     const conferenceRows = document.querySelector("#conferenceRows");
