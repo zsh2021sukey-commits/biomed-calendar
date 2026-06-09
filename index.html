@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>生物医药会议日历生成器</title>
+  <meta name="description" content="勾选生物医药领域重要学术会议，一键生成可导入手机日历的 ICS 文件。">
+  <meta property="og:title" content="生物医药会议日历生成器">
+  <meta property="og:description" content="按领域选择 ASCO、ESMO、ASH、ACC、AHA 等重要会议，下载手机日历文件。">
+  <meta property="og:type" content="website">
+  <!-- 将百度统计提供的 <script>...</script> 代码粘贴在这一行下面。 -->
+  <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?e8b845578851b6def8960d6c97841615";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1f2933;
+      --muted: #697586;
+      --line: #d9e2ec;
+      --surface: #ffffff;
+      --soft: #f4f7fb;
+      --accent: #1167b1;
+      --accent-ink: #ffffff;
+      --focus: #f7c948;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--soft);
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 18px 48px;
+    }
+
+    header {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 780px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin: 18px 0;
+    }
+
+    button,
+    select {
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--ink);
+      padding: 0 12px;
+      font-size: 14px;
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button.primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: var(--accent-ink);
+    }
+
+    button:focus-visible,
+    select:focus-visible,
+    input:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .status {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 940px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--line);
+      padding: 12px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    th {
+      background: #eef3f8;
+      color: #344054;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .check-cell {
+      width: 46px;
+      text-align: center;
+    }
+
+    .date-cell {
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      border-radius: 999px;
+      background: #e6f0fa;
+      color: #174a7c;
+      padding: 2px 9px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .note {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .disclaimer {
+      margin-top: 18px;
+      border-left: 4px solid var(--accent);
+      background: var(--surface);
+      padding: 13px 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 720px) {
+      main {
+        padding: 22px 12px 36px;
+      }
+
+      h1 {
+        font-size: 23px;
+      }
+
+      .controls {
+        align-items: stretch;
+      }
+
+      button,
+      select {
+        width: 100%;
+      }
+
+      .status {
+        width: 100%;
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>生物医药会议日历生成器</h1>
+      <p class="subtitle">勾选想关注的会议，下载日历文件后即可添加到 iPhone 日历、Google Calendar 或 Outlook。会议日期会随主办方安排调整，正式参会、投稿、差旅和投资决策前请以官网最新信息为准。</p>
+    </header>
+
+    <section class="controls" aria-label="日历生成控制">
+      <select id="fieldFilter" aria-label="按领域筛选">
+        <option value="all">全部领域</option>
+      </select>
+      <button type="button" id="selectVisible">选择当前列表</button>
+      <button type="button" id="clearAll">清空选择</button>
+      <button type="button" id="downloadIcs" class="primary">下载日历文件</button>
+      <span id="status" class="status">已选择 0 个会议</span>
+    </section>
+
+    <section class="table-wrap" aria-label="会议列表">
+      <table>
+        <thead>
+          <tr>
+            <th class="check-cell">选择</th>
+            <th>日期</th>
+            <th>会议</th>
+            <th>领域</th>
+            <th>关注重点</th>
+            <th>官网</th>
+          </tr>
+        </thead>
+        <tbody id="conferenceRows"></tbody>
+      </table>
+    </section>
+
+    <p class="note">提示：全天事件的结束日期在 ICS 标准里要写成“会议结束日的下一天”，这个页面已经自动处理。</p>
+    <section class="disclaimer" aria-label="使用声明">
+      本工具仅用于会议日程提醒和信息整理，不构成医学、投资、交易、参会或投稿建议。页面内日期和链接最后核对时间为 2026-06-09；会议主办方可能调整会期、地点、摘要解禁时间或线上访问规则，请以各会议官网发布的最新信息为准。
+    </section>
+  </main>
+
+  <script>
+    const conferences = [
+      {
+        id: "asco-gi-2026",
+        name: "ASCO GI 2026",
+        start: "2026-01-08",
+        end: "2026-01-10",
+        field: "肿瘤/消化道肿瘤",
+        focus: "胃癌、结直肠癌、胰腺癌、肝胆肿瘤",
+        url: "https://meetings.asco.org/"
+      },
+      {
+        id: "asco-gu-2026",
+        name: "ASCO GU 2026",
+        start: "2026-02-26",
+        end: "2026-02-28",
+        field: "肿瘤/泌尿生殖",
+        focus: "前列腺癌、肾癌、膀胱癌、尿路上皮癌",
+        url: "https://www.asco.org/gu"
+      },
+      {
+        id: "acc-2026",
+        name: "ACC Scientific Session 2026",
+        start: "2026-03-28",
+        end: "2026-03-30",
+        field: "心血管",
+        focus: "降脂、抗凝、心衰、心血管结局研究",
+        url: "https://accscientificsession.acc.org/"
+      },
+      {
+        id: "aad-2026",
+        name: "AAD Annual Meeting 2026",
+        start: "2026-03-27",
+        end: "2026-03-31",
+        field: "皮肤",
+        focus: "特应性皮炎、银屑病、斑秃、自免皮肤病",
+        url: "https://meetings.aad.org/am2026/"
+      },
+      {
+        id: "aacr-2026",
+        name: "AACR Annual Meeting 2026",
+        start: "2026-04-17",
+        end: "2026-04-22",
+        field: "肿瘤",
+        focus: "早期临床、机制、转化医学、first-in-human、ADC、双抗、细胞治疗",
+        url: "https://www.aacr.org/meeting/aacr-annual-meeting-2026/"
+      },
+      {
+        id: "aan-2026",
+        name: "AAN Annual Meeting 2026",
+        start: "2026-04-18",
+        end: "2026-04-22",
+        field: "神经",
+        focus: "阿尔茨海默病、帕金森、多发性硬化、罕见神经病",
+        url: "https://www.aan.com/events/annual-meeting"
+      },
+      {
+        id: "ddw-2026",
+        name: "DDW 2026",
+        start: "2026-05-02",
+        end: "2026-05-05",
+        field: "消化",
+        focus: "IBD、消化道疾病、MASH 相关消化/肝病数据",
+        url: "https://ddw.org/home-page-2026/"
+      },
+      {
+        id: "asco-annual-2026",
+        name: "ASCO Annual Meeting 2026",
+        start: "2026-05-29",
+        end: "2026-06-02",
+        field: "肿瘤",
+        focus: "实体瘤重磅临床数据、Late-breaking、Oral、Plenary",
+        url: "https://www.asco.org/annual-meeting"
+      },
+      {
+        id: "eular-2026",
+        name: "EULAR Congress 2026",
+        start: "2026-06-03",
+        end: "2026-06-06",
+        field: "风湿免疫",
+        focus: "RA、SLE、Sjogren、自免细胞治疗",
+        url: "https://congress.eular.org/"
+      },
+      {
+        id: "ada-2026",
+        name: "ADA Scientific Sessions 2026",
+        start: "2026-06-05",
+        end: "2026-06-08",
+        field: "糖尿病/代谢",
+        focus: "GLP-1、胰岛素、肥胖、糖尿病并发症",
+        url: "https://professional.diabetes.org/scientific-sessions"
+      },
+      {
+        id: "eha-2026",
+        name: "EHA Congress 2026",
+        start: "2026-06-11",
+        end: "2026-06-14",
+        field: "血液",
+        focus: "血液病、血液肿瘤、CAR-T、双抗、BTK、BCL-2",
+        url: "https://ehaweb.org/connect-network/eha2026-congress"
+      },
+      {
+        id: "esc-2026",
+        name: "ESC Congress 2026",
+        start: "2026-08-28",
+        end: "2026-08-31",
+        field: "心血管",
+        focus: "欧洲心血管核心大会，大型 III 期和结局研究",
+        url: "https://www.escardio.org/Congresses-Events/ESC-Congress"
+      },
+      {
+        id: "ers-2026",
+        name: "ERS Congress 2026",
+        start: "2026-09-05",
+        end: "2026-09-09",
+        field: "呼吸",
+        focus: "哮喘、COPD、肺纤维化、肺动脉高压",
+        url: "https://www.ersnet.org/congress-and-events/congress/"
+      },
+      {
+        id: "wclc-2026",
+        name: "WCLC 2026",
+        start: "2026-09-12",
+        end: "2026-09-15",
+        field: "肺癌",
+        focus: "NSCLC、SCLC、EGFR/ALK、ADC、免疫联合、胸部肿瘤",
+        url: "https://wclc.iaslc.org/"
+      },
+      {
+        id: "easd-2026",
+        name: "EASD Annual Meeting 2026",
+        start: "2026-09-28",
+        end: "2026-10-02",
+        field: "糖尿病/代谢",
+        focus: "糖尿病、肥胖、代谢药物，和 ADA 互补",
+        url: "https://www.easd.org/annual-meeting/easd-2026.html"
+      },
+      {
+        id: "idweek-2026",
+        name: "IDWeek 2026",
+        start: "2026-10-21",
+        end: "2026-10-24",
+        field: "感染",
+        focus: "抗感染、疫苗、抗病毒、耐药菌",
+        url: "https://www.idweek.org/"
+      },
+      {
+        id: "esmo-2026",
+        name: "ESMO Congress 2026",
+        start: "2026-10-23",
+        end: "2026-10-27",
+        field: "肿瘤",
+        focus: "实体瘤下半年重磅临床数据、Presidential、LBA、Proffered Paper",
+        url: "https://www.esmo.org/meeting-calendar/esmo-congress-2026"
+      },
+      {
+        id: "acr-2026",
+        name: "ACR Convergence 2026",
+        start: "2026-11-06",
+        end: "2026-11-11",
+        field: "风湿免疫",
+        focus: "美国风湿免疫核心会，和 EULAR 互补",
+        url: "https://rheumatology.org/annual-meeting-registration"
+      },
+      {
+        id: "aasld-2026",
+        name: "AASLD The Liver Meeting 2026",
+        start: "2026-11-05",
+        end: "2026-11-09",
+        field: "肝病",
+        focus: "乙肝、MASH/NASH、肝纤维化、肝硬化",
+        url: "https://www.aasld.org/tlm-26/home"
+      },
+      {
+        id: "aha-2026",
+        name: "AHA Scientific Sessions 2026",
+        start: "2026-11-06",
+        end: "2026-11-09",
+        field: "心血管",
+        focus: "Late-breaking trial、心血管结局研究",
+        url: "https://professional.heart.org/en/meetings/scientific-sessions"
+      },
+      {
+        id: "sabcs-2026",
+        name: "SABCS 2026",
+        start: "2026-12-08",
+        end: "2026-12-11",
+        field: "乳腺癌",
+        focus: "乳腺癌年度重磅数据",
+        url: "https://sabcs.org/"
+      },
+      {
+        id: "ash-2026",
+        name: "ASH Annual Meeting 2026",
+        start: "2026-12-12",
+        end: "2026-12-15",
+        field: "血液",
+        focus: "血液病、血液肿瘤、CAR-T、双抗、BTK、BCL-2",
+        url: "https://www.hematology.org/meetings/annual-meeting"
+      }
+    ];
+
+    const fieldFilter = document.querySelector("#fieldFilter");
+    const conferenceRows = document.querySelector("#conferenceRows");
+    const statusLabel = document.querySelector("#status");
+    const selectedIds = new Set();
+
+    function formatDateRange(start, end) {
+      return `${start} 至 ${end}`;
+    }
+
+    function getVisibleConferences() {
+      const field = fieldFilter.value;
+      return conferences.filter((item) => field === "all" || item.field === field);
+    }
+
+    function updateStatus() {
+      statusLabel.textContent = `已选择 ${selectedIds.size} 个会议`;
+    }
+
+    function renderFilters() {
+      const fields = [...new Set(conferences.map((item) => item.field))];
+      fields.forEach((field) => {
+        const option = document.createElement("option");
+        option.value = field;
+        option.textContent = field;
+        fieldFilter.appendChild(option);
+      });
+    }
+
+    function renderRows() {
+      conferenceRows.innerHTML = "";
+      getVisibleConferences().forEach((item) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="check-cell">
+            <input type="checkbox" aria-label="选择 ${escapeHtml(item.name)}" data-id="${item.id}" ${selectedIds.has(item.id) ? "checked" : ""}>
+          </td>
+          <td class="date-cell">${formatDateRange(item.start, item.end)}</td>
+          <td><strong>${escapeHtml(item.name)}</strong></td>
+          <td><span class="tag">${escapeHtml(item.field)}</span></td>
+          <td>${escapeHtml(item.focus)}</td>
+          <td><a href="${item.url}" target="_blank" rel="noopener">官网</a></td>
+        `;
+        conferenceRows.appendChild(row);
+      });
+      updateStatus();
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function addOneDay(dateText) {
+      const date = new Date(`${dateText}T00:00:00Z`);
+      date.setUTCDate(date.getUTCDate() + 1);
+      return date.toISOString().slice(0, 10);
+    }
+
+    function toIcsDate(dateText) {
+      return dateText.replaceAll("-", "");
+    }
+
+    function foldIcsLine(line) {
+      const chunks = [];
+      let text = line;
+      while (text.length > 70) {
+        chunks.push(text.slice(0, 70));
+        text = ` ${text.slice(70)}`;
+      }
+      chunks.push(text);
+      return chunks.join("\r\n");
+    }
+
+    function escapeIcsText(value) {
+      return String(value)
+        .replaceAll("\\", "\\\\")
+        .replaceAll(";", "\\;")
+        .replaceAll(",", "\\,")
+        .replaceAll("\n", "\\n");
+    }
+
+    function buildIcs(items) {
+      const now = new Date().toISOString().replaceAll("-", "").replaceAll(":", "").replace(/\.\d{3}Z$/, "Z");
+      const lines = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Biomed Conference Calendar//CN",
+        "CALSCALE:GREGORIAN",
+        "METHOD:PUBLISH",
+        "X-WR-CALNAME:生物医药创新药会议"
+      ];
+
+      items.forEach((item) => {
+        lines.push(
+          "BEGIN:VEVENT",
+          `UID:${item.id}@biomed-calendar.local`,
+          `DTSTAMP:${now}`,
+          `DTSTART;VALUE=DATE:${toIcsDate(item.start)}`,
+          `DTEND;VALUE=DATE:${toIcsDate(addOneDay(item.end))}`,
+          foldIcsLine(`SUMMARY:${escapeIcsText(item.name)}`),
+          foldIcsLine(`DESCRIPTION:${escapeIcsText(`${item.field}｜${item.focus}\n官网：${item.url}`)}`),
+          foldIcsLine(`URL:${item.url}`),
+          "END:VEVENT"
+        );
+      });
+
+      lines.push("END:VCALENDAR");
+      return `${lines.join("\r\n")}\r\n`;
+    }
+
+    function downloadIcs() {
+      const selected = conferences.filter((item) => selectedIds.has(item.id));
+      if (selected.length === 0) {
+        alert("请先选择至少一个会议。");
+        return;
+      }
+
+      trackDownloadEvent(selected);
+      const ics = buildIcs(selected);
+      const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "biomed-conferences-2026.ics";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function trackDownloadEvent(selected) {
+      const source = new URLSearchParams(window.location.search).get("utm_source") || "direct";
+      const label = `${source}_${selected.length}_events`;
+
+      if (window._hmt) {
+        window._hmt.push(["_trackEvent", "calendar", "download_ics", label, selected.length]);
+      }
+    }
+
+    conferenceRows.addEventListener("change", (event) => {
+      if (!event.target.matches("input[type='checkbox']")) return;
+      if (event.target.checked) {
+        selectedIds.add(event.target.dataset.id);
+      } else {
+        selectedIds.delete(event.target.dataset.id);
+      }
+      updateStatus();
+    });
+
+    fieldFilter.addEventListener("change", renderRows);
+
+    document.querySelector("#selectVisible").addEventListener("click", () => {
+      getVisibleConferences().forEach((item) => selectedIds.add(item.id));
+      renderRows();
+    });
+
+    document.querySelector("#clearAll").addEventListener("click", () => {
+      selectedIds.clear();
+      renderRows();
+    });
+
+    document.querySelector("#downloadIcs").addEventListener("click", downloadIcs);
+
+    renderFilters();
+    renderRows();
+  </script>
+</body>
+</html>
