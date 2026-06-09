@@ -237,6 +237,11 @@
       <select id="fieldFilter" aria-label="按领域筛选">
         <option value="all">全部领域</option>
       </select>
+      <select id="calendarMode" aria-label="选择添加方式">
+        <option value="start-only">只添加开始日提醒</option>
+        <option value="full-span">添加完整会期</option>
+        <option value="pre14-start">会前14天提醒 + 开始日提醒</option>
+      </select>
       <button type="button" id="selectVisible">选择当前列表</button>
       <button type="button" id="clearAll">清空选择</button>
       <button type="button" id="downloadIcs" class="primary">下载日历文件</button>
@@ -260,7 +265,7 @@
       </table>
     </section>
 
-    <p class="note">提示：全天事件的结束日期在 ICS 标准里要写成“会议结束日的下一天”，这个页面已经自动处理。</p>
+    <p class="note">提示：默认只添加会议开始日提醒，避免多日会议占满日历；如需看到完整会期，可在上方切换添加方式。全天事件的结束日期在 ICS 标准里要写成“会议结束日的下一天”，这个页面已经自动处理。</p>
     <section class="disclaimer" aria-label="使用声明">
       本工具仅用于会议日程提醒和信息整理，不构成医学、投资、交易、参会或投稿建议。页面覆盖 2026年6月-2027年6月，日期和链接最后核对时间为 2026-06-09；会议主办方可能调整会期、地点、摘要解禁时间或线上访问规则，未公布明确官方日期的会议暂不纳入，请以各会议官网发布的最新信息为准。
     </section>
@@ -494,6 +499,7 @@
 };
 
     const fieldFilter = document.querySelector("#fieldFilter");
+    const calendarMode = document.querySelector("#calendarMode");
     const conferenceRows = document.querySelector("#conferenceRows");
     const statusLabel = document.querySelector("#status");
     const selectedIds = new Set();
@@ -560,6 +566,12 @@
       return date.toISOString().slice(0, 10);
     }
 
+    function addDays(dateText, days) {
+      const date = new Date(`${dateText}T00:00:00Z`);
+      date.setUTCDate(date.getUTCDate() + days);
+      return date.toISOString().slice(0, 10);
+    }
+
     function toIcsDate(dateText) {
       return dateText.replaceAll("-", "");
     }
@@ -583,7 +595,58 @@
         .replaceAll("\n", "\\n");
     }
 
-    function buildIcs(items) {
+    function getModeName(mode) {
+      const names = {
+        "start-only": "只添加开始日提醒",
+        "full-span": "添加完整会期",
+        "pre14-start": "会前14天提醒 + 开始日提醒"
+      };
+      return names[mode] || names["start-only"];
+    }
+
+    function createCalendarEvents(item, mode) {
+      const commonDescription = `${item.field}｜${item.focus}\n完整会期：${item.start} 至 ${item.end}\n为什么关注：${getConferenceWhy(item)}\n官网：${item.url}`;
+
+      if (mode === "full-span") {
+        return [{
+          uid: item.id,
+          start: item.start,
+          end: addOneDay(item.end),
+          summary: item.name,
+          description: commonDescription
+        }];
+      }
+
+      if (mode === "pre14-start") {
+        const reminderDate = addDays(item.start, -14);
+        return [
+          {
+            uid: `${item.id}-pre14`,
+            start: reminderDate,
+            end: addOneDay(reminderDate),
+            summary: `${item.name}：会前14天提醒`,
+            description: commonDescription
+          },
+          {
+            uid: `${item.id}-start`,
+            start: item.start,
+            end: addOneDay(item.start),
+            summary: `${item.name}：会议开始`,
+            description: commonDescription
+          }
+        ];
+      }
+
+      return [{
+        uid: `${item.id}-start`,
+        start: item.start,
+        end: addOneDay(item.start),
+        summary: `${item.name}：会议开始`,
+        description: commonDescription
+      }];
+    }
+
+    function buildIcs(items, mode) {
       const now = new Date().toISOString().replaceAll("-", "").replaceAll(":", "").replace(/\.\d{3}Z$/, "Z");
       const lines = [
         "BEGIN:VCALENDAR",
@@ -595,17 +658,19 @@
       ];
 
       items.forEach((item) => {
-        lines.push(
-          "BEGIN:VEVENT",
-          `UID:${item.id}@biomed-calendar.local`,
-          `DTSTAMP:${now}`,
-          `DTSTART;VALUE=DATE:${toIcsDate(item.start)}`,
-          `DTEND;VALUE=DATE:${toIcsDate(addOneDay(item.end))}`,
-          foldIcsLine(`SUMMARY:${escapeIcsText(item.name)}`),
-          foldIcsLine(`DESCRIPTION:${escapeIcsText(`${item.field}｜${item.focus}\n为什么关注：${getConferenceWhy(item)}\n官网：${item.url}`)}`),
-          foldIcsLine(`URL:${item.url}`),
-          "END:VEVENT"
-        );
+        createCalendarEvents(item, mode).forEach((event) => {
+          lines.push(
+            "BEGIN:VEVENT",
+            `UID:${event.uid}@biomed-calendar.local`,
+            `DTSTAMP:${now}`,
+            `DTSTART;VALUE=DATE:${toIcsDate(event.start)}`,
+            `DTEND;VALUE=DATE:${toIcsDate(event.end)}`,
+            foldIcsLine(`SUMMARY:${escapeIcsText(event.summary)}`),
+            foldIcsLine(`DESCRIPTION:${escapeIcsText(event.description)}`),
+            foldIcsLine(`URL:${item.url}`),
+            "END:VEVENT"
+          );
+        });
       });
 
       lines.push("END:VCALENDAR");
@@ -619,22 +684,23 @@
         return;
       }
 
-      trackDownloadEvent(selected);
-      const ics = buildIcs(selected);
+      const mode = calendarMode.value;
+      trackDownloadEvent(selected, mode);
+      const ics = buildIcs(selected, mode);
       const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = "biomed-conferences-2026.ics";
+      link.download = `biomed-conferences-${mode}.ics`;
       document.body.appendChild(link);
       link.click();
       link.remove();
       URL.revokeObjectURL(url);
     }
 
-    function trackDownloadEvent(selected) {
+    function trackDownloadEvent(selected, mode) {
       const source = new URLSearchParams(window.location.search).get("utm_source") || "direct";
-      const label = `${source}_${selected.length}_events`;
+      const label = `${source}_${mode}_${selected.length}_meetings`;
 
       if (window._hmt) {
         window._hmt.push(["_trackEvent", "calendar", "download_ics", label, selected.length]);
